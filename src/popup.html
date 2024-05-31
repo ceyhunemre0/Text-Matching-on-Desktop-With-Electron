@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sonuç</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+
+<body>
+    <div class="content">
+        <h1>Karşılaştırma Sonucu</h1>
+        <h3 id="textData"></h3>
+        <img id="popupImage">
+    </div>
+
+    <script>
+        // Electron'dan gelen görüntü verisini gösteren olay dinleyicisi
+        window.electron.onDisplayImage((imageData) => {
+            // <img> etiketinin src özelliğini gelen görüntü verisiyle ayarlıyoruz
+            document.getElementById('popupImage').src = imageData;
+        });
+
+        // Electron'dan gelen metin verisini gösteren olay dinleyicisi
+        window.electron.onDisplayTextData((textData) => {
+            // Gelen matris verisi önce [0,0], sonra [0,1], [1,0], [1,1] şeklinde sonuçları döndürüyor.
+            // İlk önce ilk metnin kendisiyle olan benzerlik oranı,
+            // sonra 1. metnin 2. metne olan benzerlik oranı,
+            // sonra 2. metnin 1. metne olan benzerlik oranı,
+            // daha sonra ise 2. metnin 2. metne olan benzerlik oranı şeklinde sonuç döndürüyor.
+
+            // Metinlerin benzerlik oranını alıyoruz (1. metnin 2. metne olan benzerliği)
+            var result = "Metinlerin benzerlik oranı: " + textData[0][1];
+            // <h3> etiketinin içeriğini bu oranla güncelliyoruz
+            document.getElementById('textData').innerHTML = result;
+        });
+    </script>
+</body>
+
+</html>
